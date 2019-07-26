@@ -5,7 +5,11 @@ const router = express.Router();
 
 /* GET contact page. */
 router.get('/', function(req, res, next) {
-    res.render('contact', { title: 'Smart' });
+    res.render('contact', { title: 'Smart', contact: 'active' });
   });
 
+router.post('/form', function(req,res,next){
+  // res.render('contact', { title: 'Smart' })
+  res.send('OK');
+});
 module.exports = router;

@@ -1,46 +1,25 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const express = require('express');
+// eslint-disable-next-line new-cap
 const router = express.Router();
-const Switch = require('./model.js');
+// const Switch = require('../app/models/television_model');
+// let devices;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  // Switch.find().then((Switch) => {
-  //   SwitchList = Switch;
-      res.render('index', { title: 'Smart' ,switch: SwitchList});
-// })
+  res.render('index', { title: 'Smart', home: 'active'});
 });
 
-// // Create an Switch and Save
-// router.post('index',function(req,res,next){
-//   const button = new Switch({
-//     switch: req.body.switch || "Untitled Switch",
-//     temperature: req.body.temperature,
-//     volume: req.body.volume
-//   });
-//   button.save()
-//       .then(res.redirect('index'));
-//       });
+// television Schema Create
+// const television = new Switch({
+//   name:  "BEDROOM(R) TV",
+//   switch:true,
+//   volume:35,
+//   channel:14
+// });
+// television.save().then(()=>{
+//   console.log('saved !');
+// })
 
-//  //  Update the Switch
-router.post('/savechanges', function (req, res) {
-  Switch.findByIdAndUpdate(req.params.id, {
-    switch: req.body.switch ,
-    temperature: req.body.temperature,
-    volume: req.body.volume
-  }, { new: true, useFindAndModify: false }, (err) => {
-    if (err) throw (err);
-  }).then(res.redirect('index'));
-});       
-
-// // Deletes the Switch     
-//   router.delete('index/delete/:id', function (req, res, next) {
-//       Switch.findByIdAndDelete(req.params.id,{ useFindAndModify: false }, (err) => {
-//           if (err) throw (err);
-//         })
-//       .then(res.redirect(500, 'index'));
-//   });
-
-  
 module.exports = router;

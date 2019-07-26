@@ -1,6 +1,9 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-useless-escape */
 (function ($) {
     "use strict";
-
+    
     // // Preloader
     $(window).on('load', function () {
       if ($('#preloader').length) {
@@ -22,16 +25,33 @@
       $('html, body').animate({scrollTop : 0},1500, 'easeInOutExpo');
       return false;
     });
-    
-      // $(document).ready(function() {
-      //   $('.toggle-nav').click(function(e) {
-      //     $(this).toggleClass('active');
-      //     $('.navbar ul').toggleClass('active');
-      
-      //     e.preventDefault();
-      //   });
-      // });
 
+   /*--/ Carousel owl /--*/
+	$('#carousel').owlCarousel({
+		loop: true,
+		margin: -1,
+		items: 1,
+		nav: true,
+		navText: ['<i class="ion-ios-arrow-back" aria-hidden="true"></i>', '<i class="ion-ios-arrow-forward" aria-hidden="true"></i>'],
+		autoplay: true,
+		autoplayTimeout: 3000,
+		autoplayHoverPause: true
+	});
+
+	/*--/ Animate Carousel /--*/
+	$('.intro-carousel').on('translate.owl.carousel', function () {
+		$('.intro-content .intro-title').removeClass('zoomIn animated').hide();
+		$('.intro-content .intro-price').removeClass('fadeInUp animated').hide();
+		$('.intro-content .intro-title-top, .intro-content .spacial').removeClass('fadeIn animated').hide();
+	});
+
+	$('.intro-carousel').on('translated.owl.carousel', function () {
+		$('.intro-content .intro-title').addClass('zoomIn animated').show();
+		$('.intro-content .intro-price').addClass('fadeInUp animated').show();
+		$('.intro-content .intro-title-top, .intro-content .spacial').addClass('fadeIn animated').show();
+  });
+  
+  // contact
   $('form.contactForm').submit(function() {
     var f = $(this).find('.form-group'),
       ferror = false,
@@ -118,11 +138,13 @@
         i.next('.validation').html((ierror ? (i.attr('data-msg') != undefined ? i.attr('data-msg') : 'wrong Input') : '')).show('blind');
       }
     });
+
     if (ferror) return false;
     else var str = $(this).serialize();
     var action = $(this).attr('action');
+// alert(action)
     if( ! action ) {
-      action = 'contactform/contactform.php';
+      action = '/contact/form';
     }
     $.ajax({
       type: "POST",
@@ -139,63 +161,44 @@
           $("#errormessage").addClass("show");
           $('#errormessage').html(msg);
         }
-
       }
+      
     });
     return false;
   });
 
-
 // thermostat
-var gradi = 19;
-var max = 34;
-var min = 2;
-
-function updateGr(){
-  $(".heat").text("" + gradi);
-  $(".ext").text("" + gradi);
-  $(".number").css("transform", "translate(-50%, -50%) rotate("+ (-180 + gradi * 10)+"deg)");
-  $(".shadow").css("transform", "translate(-50%, -50%) rotate("+ (-180 + gradi * 10)+"deg)");
-  $(".fill").css("animation", "none");
-  $(".shadow").css("animation", "none");
-}
-
-
-$(".minus").mousedown(function(){ 
-  if(gradi > min){
-    gradi--;
-    updateGr();
-    if(gradi >= 18){
-      $(".fill1").css("transform", "rotate("+ (gradi - 18) * 10 +"deg)").css("transition-delay", "0s");
-    }else if(gradi == 17){
-      $(".fill2").css("transform", "rotate("+ gradi * 10 +"deg)").css("transition-delay", "0.5s");  
-    }else{
-      $(".fill2").css("transform", "rotate("+ gradi * 10 +"deg)").css("transition-delay", "0s");
-    }
-  }
+$("#increase").click(function increaseValue() {
+  let value = parseInt(document.getElementById('number').value, 10);
+  value = isNaN(value) ? 0 : value;
+  value++;
+  document.getElementById('number').value = value;
 });
 
-$(".plus").mousedown(function(){
-  if(gradi < max){
-    gradi++;
-    updateGr();
-    if(gradi > 19){
-      $(".fill1").css("transform", "rotate("+ (gradi - 18) * 10 +"deg)").css("transition-delay", "0s");
-    }else if(gradi == 19){
-      $(".fill1").css("transform", "rotate("+ (gradi - 18) * 10 +"deg)").css("transition-delay", "1s"); 
-    }else{
-      $(".fill2").css("transform", "rotate("+ gradi * 10 +"deg)").css("transition-delay", "0s");
-    }
-  }  
+$("#decrease").click(function decreaseValue() {
+  let value = parseInt(document.getElementById('number').value, 10);
+  value = isNaN(value) ? 0 : value;
+  value < 1 ? value = 1 : '';
+  value--;
+  document.getElementById('number').value = value;
 });
 
-$('#close').click(function() {
-  $.ajax({
-    url: '/savechanges' + $(this).parent('tr').find('.name-api').text(),
-    type: 'POST',
-    success: printTask,
+// Volume
+$(function () {
+  $('.add').on('click',function(){
+      const $qty=$(this).closest('p').find('.qty');
+      const currentVal = parseInt($qty.val());
+      if (!isNaN(currentVal)) {
+          $qty.val(currentVal + 1);
+      }
+  });
+  $('.minus').on('click',function(){
+      const $qty=$(this).closest('p').find('.qty');
+      const currentVal = parseInt($qty.val());
+      if (!isNaN(currentVal) && currentVal > 0) {
+          $qty.val(currentVal - 1);
+      }
   });
 });
-
 
   })(jQuery);

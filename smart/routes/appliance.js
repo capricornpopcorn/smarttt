@@ -5,7 +5,7 @@ const router = express.Router();
 
 /* GET appliances page. */
 router.get('/', function(req, res, next) {
-    res.render('appliance', { title: 'Smart' });
+    res.render('appliance', { title: 'Smart', app: 'active' });
   });
 
 module.exports = router;
