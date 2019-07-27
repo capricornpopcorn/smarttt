@@ -1,9 +1,8 @@
-/* eslint-disable no-unused-consts */
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
-// const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const app = express();
@@ -44,11 +43,11 @@ const indexRouter = require('./routes/index');
 const aboutRouter = require('./routes/about');
 const appliancesRouter = require('./routes/appliance');
 const contactRouter = require('./routes/contact');
+const demoRouter = require('./routes/demo');
 const itemRouter = require('./routes/item');
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 // Call out the routes of pages
 app.use('/', indexRouter);
@@ -56,23 +55,14 @@ app.use('/about', aboutRouter);
 app.use('/appliance', appliancesRouter);
 app.use('/contact', contactRouter);
 app.use('/item', itemRouter);
-
-// // To view number of times you have visited pages in one session
-app.get('/count', function (req, res) {
-  res.setHeader('Content-Type', 'text/html');
-  res.write('<p> You have viewed pages ' + req.session.views + ' times </p>');
-  res.end();
-});
+app.use('/demo', demoRouter);
 
 // Socket.io Configuration..
 io.on('connection', (socket) => {
   console.log('Client connected');
-  // console.log(`[ server.js ] ${socket.id} connected`);
   socket.on('disconnect', () => console.log('Client disconnected'));
 
   socket.on('status',(item) => {
-    // io.sockets.emit('status', item);
-    //     console.log(item);
     io.sockets.emit('status',  (item));
     console.log(item);
    
